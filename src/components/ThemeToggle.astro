@@ -1,0 +1,31 @@
+<script>
+  import { alpineData } from "@utils/index";
+
+  const root = document.querySelector("html");
+
+  alpineData("theme_toggle", () => ({
+    theme: undefined,
+    init() {
+      let theme = localStorage.getItem("theme");
+      if (!theme) {
+        let isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        theme = isDark ? "dark" : "light";
+      }
+      this.theme = theme;
+      if (theme === "dark") root.classList.add("dark");
+    },
+    toggle() {
+      if (this.theme === "light") {
+        localStorage.setItem("theme", "dark");
+        this.theme = "dark";
+        root.classList.add("dark");
+      } else if (this.theme === "dark") {
+        localStorage.setItem("theme", "light");
+        this.theme = "light";
+        root.classList.remove("dark");
+      }
+    },
+  }));
+</script>
+
+<button x-data="theme_toggle" x-on:click="toggle()">toggle</button>

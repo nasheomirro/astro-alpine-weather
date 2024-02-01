@@ -22,7 +22,6 @@ export const GET: APIRoute = async ({ url }) => {
     country: regionName.of(city.country),
   }));
 
-  console.log(cities);
   return new Response(JSON.stringify(cities), {
     headers: {
       "Content-Type": "application/json",

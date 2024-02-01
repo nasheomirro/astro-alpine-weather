@@ -1,24 +1,23 @@
 ---
-
+import ThemeToggle from "./ThemeToggle.astro";
 ---
 
 <script>
-  document.addEventListener("alpine:init", () => {
-    window.Alpine.data("search_form", () => ({
-      results: [],
-      async fetchResults() {
-        // TODO: handle error
-        const res = await fetch(
-          "/api/cities?q=" + this.$refs.search.value
-        ).then((res) => res.json());
-        console.log("called!", res);
-        this.results = res;
-      },
-    }));
-  });
+  import { alpineData } from "@utils/index";
+  alpineData("search_form", () => ({
+    results: [],
+    async fetchResults() {
+      // TODO: handle error
+      const res = await fetch("/api/cities?q=" + this.$refs.search.value).then(
+        (res) => res.json()
+      );
+      this.results = res;
+    },
+  }));
 </script>
 
 <div>
+  <ThemeToggle />
   <div x-data="search_form">
     <form x-on:submit.prevent="fetchResults()">
       <input class="m-2 border border-stone-400" x-ref="search" type="search" />
@@ -30,7 +29,7 @@
         <li>
           <a
             :href="`/?lat=${result.lat}&lon=${result.lon}`"
-            x-text="result.name"></a>
+            x-text="result.name + ', ' + result.country"></a>
         </li>
       </template>
     </ul>
