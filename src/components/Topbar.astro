@@ -1,0 +1,38 @@
+---
+
+---
+
+<script>
+  document.addEventListener("alpine:init", () => {
+    window.Alpine.data("search_form", () => ({
+      results: [],
+      async fetchResults() {
+        // TODO: handle error
+        const res = await fetch(
+          "/api/cities?q=" + this.$refs.search.value
+        ).then((res) => res.json());
+        console.log("called!", res);
+        this.results = res;
+      },
+    }));
+  });
+</script>
+
+<div>
+  <div x-data="search_form">
+    <form x-on:submit.prevent="fetchResults()">
+      <input class="m-2 border border-stone-400" x-ref="search" type="search" />
+      <button type="submit">search</button>
+    </form>
+
+    <ul>
+      <template x-for="result in results">
+        <li>
+          <a
+            :href="`/?lat=${result.lat}&lon=${result.lon}`"
+            x-text="result.name"></a>
+        </li>
+      </template>
+    </ul>
+  </div>
+</div>
