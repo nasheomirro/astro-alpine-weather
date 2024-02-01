@@ -1,5 +1,5 @@
 ---
-import Topbar from "@components/Topbar.astro";
+import Topbar from "@/navbar/Topbar.astro";
 ---
 
 <html lang="en">
@@ -9,21 +9,21 @@ import Topbar from "@components/Topbar.astro";
     <meta name="generator" content={Astro.generator} />
     <title>Document</title>
     <script is:inline>
-      // avoid FOUC
-      const root = document.querySelector("html");
       let theme = localStorage.getItem("theme");
-      
       if (!theme) {
         const isDark = window.matchMedia(
           "(prefers-color-scheme: dark)"
         ).matches;
         theme = isDark ? "dark" : "light";
       }
-
-      if (theme === "dark") root.classList.add("dark");
+      // avoid FOUC
+      if (theme === "dark") document.documentElement.classList.add("dark");
     </script>
   </head>
-  <body class="bg-surface-100 dark:bg-surface-900">
+  
+  <body
+    class="text-surface-950 bg-surface-100 dark:bg-surface-950 dark:text-surface-50"
+  >
     <Topbar />
     <slot />
   </body>

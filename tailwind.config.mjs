@@ -4,6 +4,8 @@ export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     colors: {
+      transparent: 'transparent',
+      inherit: 'inherit',
       surface: {
         50: "#FCFCFD",
         100: "#F5F5FA",

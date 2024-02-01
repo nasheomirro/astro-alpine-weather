@@ -1,7 +1,12 @@
-<script>
-  import { alpineData } from "@utils/index";
+---
+import MoonIcon from "@/icons/MoonIcon.astro";
+import SunIcon from "@/icons/SunIcon.astro";
+---
 
-  const root = document.querySelector("html");
+<script>
+  import { alpineData } from "@/utils";
+
+  const root = document.documentElement;
 
   alpineData("theme_toggle", () => ({
     theme: undefined,
@@ -28,4 +33,15 @@
   }));
 </script>
 
-<button x-data="theme_toggle" x-on:click="toggle()">toggle</button>
+<button
+  class="w-9 h-9 p-1 rounded-full border border-surface-500 dark:border-surface-800 bg-surface-300 text-surface-600 dark:bg-surface-900 dark:text-surface-600"
+  x-data="theme_toggle"
+  @click="toggle()"
+>
+  <template x-if="theme === 'light'">
+    <SunIcon />
+  </template>
+  <template x-if="theme === 'dark'">
+    <MoonIcon />
+  </template>
+</button>

@@ -1,0 +1,14 @@
+---
+import SectionContainer from "@/components/SectionContainer.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import SearchForm from "./SearchForm.astro";
+---
+
+<SectionContainer as="div">
+  <nav class="py-3 flex items-center justify-between">
+    <div class="ml-auto flex gap-2 sm:gap-4 items-center">
+      <ThemeToggle />
+      <SearchForm />
+    </div>
+  </nav>
+</SectionContainer>
