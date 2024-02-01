@@ -1,0 +1,34 @@
+---
+import Icon01 from "./weather-icons/Icon01.astro";
+import Icon02 from "./weather-icons/Icon02.astro";
+import Icon03 from "./weather-icons/Icon03.astro";
+import Icon04 from "./weather-icons/Icon04.astro";
+import Icon09 from "./weather-icons/Icon09.astro";
+import Icon10 from "./weather-icons/Icon10.astro";
+import Icon11 from "./weather-icons/Icon11.astro";
+import Icon13 from "./weather-icons/Icon13.astro";
+import Icon50 from "./weather-icons/Icon50.astro";
+
+interface Props {
+  code: string;
+}
+
+let { code } = Astro.props;
+code = code.slice(0, 2);
+
+const map = {
+  "01": Icon01,
+  "02": Icon02,
+  "03": Icon03,
+  "04": Icon04,
+  "09": Icon09,
+  "10": Icon10,
+  "11": Icon11,
+  "13": Icon13,
+  "50": Icon50,
+};
+
+const Icon = map[code];
+---
+
+<Icon />

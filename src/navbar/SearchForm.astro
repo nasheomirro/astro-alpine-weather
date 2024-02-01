@@ -1,10 +1,11 @@
 ---
 import CloseIcon from "@/icons/CloseIcon.astro";
-import SearchIcon from "@/icons/SearchIcon.astro";
+import SearchFormButton from "./SearchFormButton.astro";
 ---
 
 <script>
   import { alpineData } from "@/utils";
+  import initialResults from "./initial.json";
 
   alpineData("search_form", () => ({
     init() {
@@ -15,59 +16,22 @@ import SearchIcon from "@/icons/SearchIcon.astro";
         }
       });
     },
-    results: [
-      {
-        name: "London",
-        lat: 51.5073219,
-        lon: -0.1276474,
-        country: "United Kingdom",
-      },
-      {
-        name: "City of London",
-        lat: 51.5156177,
-        lon: -0.0919983,
-        country: "United Kingdom",
-      },
-      { name: "London", lat: 42.9832406, lon: -81.243372, country: "Canada" },
-      {
-        name: "Chelsea",
-        lat: 51.4875167,
-        lon: -0.1687007,
-        country: "United Kingdom",
-      },
-      {
-        name: "London",
-        lat: 37.1289771,
-        lon: -84.0832646,
-        country: "United States",
-      },
-    ],
+    results: initialResults,
     async fetchResults() {
-      // TODO: handle error
-      const res = await fetch("/api/cities?q=" + this.$refs.search.value).then(
-        (res) => res.json()
-      );
-      this.results = res;
+      const searchValue = this.$refs.search.value;
+      if (searchValue) {
+        // TODO: handle error
+        const res = await fetch(
+          "/api/cities?q=" + this.$refs.search.value
+        ).then((res) => res.json());
+        this.results = res;
+      }
     },
   }));
 </script>
 
 <div x-data="search_form">
-  <button
-    class="py-2 flex items-center gap-3 px-2 md:pr-4 rounded-full bg-surface-300 border border-surface-500 dark:border-surface-800 dark:bg-surface-900"
-    @click="$refs.dialog.showModal()"
-  >
-    <span class="w-5 text-surface-600">
-      <SearchIcon />
-    </span>
-    <span class="hidden sm:block text-sm text-surface-600 dark:text-surface-400"
-      >find city</span
-    >
-    <span
-      class="hidden sm:block text-xs p-0.5 px-1.5 bg-surface-100 dark:bg-surface-800 opacity-40"
-      >ctrl + k</span
-    >
-  </button>
+  <SearchFormButton />
 
   <dialog
     class="text-inherit bg-transparent mt-40 w-full max-w-96"
@@ -83,14 +47,13 @@ import SearchIcon from "@/icons/SearchIcon.astro";
         <CloseIcon />
       </button>
 
-      <form @submit.prevent="fetchResults()">
-        <input
-          class="border-b p-1 outline-none bg-transparent border-surface-400 dark:border-surface-800 w-full"
-          x-ref="search"
-          type="search"
-          autofocus
-        />
-      </form>
+      <input
+        class="border-b p-1 outline-none bg-transparent border-surface-400 dark:border-surface-800 w-full"
+        x-ref="search"
+        type="search"
+        @input.debounce="fetchResults()"
+        autofocus
+      />
 
       <ul class="pt-4">
         <template x-for="result in results">

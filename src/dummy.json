@@ -1,0 +1,44 @@
+{
+  "coord": {
+    "lon": 120.5934,
+    "lat": 16.412
+  },
+  "weather": [
+    {
+      "id": 802,
+      "main": "Clouds",
+      "description": "scattered clouds",
+      "icon": "03n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 286.93,
+    "feels_like": 286.58,
+    "temp_min": 286.93,
+    "temp_max": 286.93,
+    "pressure": 1018,
+    "humidity": 85,
+    "sea_level": 1018,
+    "grnd_level": 859
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 1.66,
+    "deg": 86,
+    "gust": 1.93
+  },
+  "clouds": {
+    "all": 34
+  },
+  "dt": 1706803970,
+  "sys": {
+    "country": "PH",
+    "sunrise": 1706826497,
+    "sunset": 1706867642
+  },
+  "timezone": 28800,
+  "id": 1728930,
+  "name": "Baguio City",
+  "cod": 200
+}

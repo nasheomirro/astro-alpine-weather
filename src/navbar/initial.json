@@ -1,0 +1,32 @@
+[
+  {
+    "name": "London",
+    "lat": 51.5073219,
+    "lon": -0.1276474,
+    "country": "United Kingdom"
+  },
+  {
+    "name": "City of London",
+    "lat": 51.5156177,
+    "lon": -0.0919983,
+    "country": "United Kingdom"
+  },
+  {
+    "name": "London",
+    "lat": 42.9832406,
+    "lon": -81.243372,
+    "country": "Canada"
+  },
+  {
+    "name": "Chelsea",
+    "lat": 51.4875167,
+    "lon": -0.1687007,
+    "country": "United Kingdom"
+  },
+  {
+    "name": "London",
+    "lat": 37.1289771,
+    "lon": -84.0832646,
+    "country": "United States"
+  }
+]

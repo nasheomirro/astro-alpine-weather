@@ -1,0 +1,19 @@
+---
+import SearchIcon from "@/icons/SearchIcon.astro";
+---
+
+<button
+  class="py-2 flex items-center gap-3 px-2 md:pr-4 rounded-full bg-surface-300 border border-surface-500 dark:border-surface-800 dark:bg-surface-900"
+  @click="$refs.dialog.showModal()"
+>
+  <span class="w-5 text-surface-600">
+    <SearchIcon />
+  </span>
+  <span class="hidden sm:block text-sm text-surface-600 dark:text-surface-400"
+    >find city</span
+  >
+  <span
+    class="hidden sm:block text-xs p-0.5 px-1.5 bg-surface-100 dark:bg-surface-800 opacity-40"
+    >ctrl + k</span
+  >
+</button>

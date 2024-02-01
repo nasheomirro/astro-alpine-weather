@@ -3,3 +3,8 @@ export const alpineData = (name: string, callback: () => any) => {
     window.Alpine.data(name, callback);
   });
 };
+
+const regionName = new Intl.DisplayNames(["en"], { type: "region" });
+export const countryCodeToName = (code: string) => {
+  return regionName.of(code);
+};

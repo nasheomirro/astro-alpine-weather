@@ -1,0 +1,28 @@
+---
+import { countryCodeToName } from "@/utils";
+import WeatherIcon from "./WeatherIcon.astro";
+import SectionContainer from "@/components/SectionContainer.astro";
+
+type Props = {
+  weatherData: Record<string, any>;
+};
+
+const { weatherData } = Astro.props;
+
+// refer to: https://openweathermap.org/current#example_JSON
+const name = weatherData.name;
+const country = countryCodeToName(weatherData.sys.country);
+const weather = weatherData.weather[0];
+---
+
+<SectionContainer>
+  <div class="mt-4">
+    <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold sm:mb-2">{name}</h1>
+    <p class="opacity-80 md:text-lg">{country}</p>
+  </div>
+  <div class="w-64 p-4 flex items-center">
+    <div class="w-12">
+      <WeatherIcon code={weather.icon} />
+    </div>
+  </div>
+</SectionContainer>

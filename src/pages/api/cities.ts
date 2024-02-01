@@ -1,13 +1,14 @@
+import { countryCodeToName } from "@/utils";
 import type { APIRoute } from "astro";
 
-const regionName = new Intl.DisplayNames(["en"], { type: "region" });
+const QUERY_LIMIT = 7;
 
 export const GET: APIRoute = async ({ url }) => {
-  const city = url.searchParams.get("q");
+  const query = url.searchParams.get("q");
 
   // TODO: handle error
   let cities = await fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${
+    `http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=${QUERY_LIMIT}&appid=${
       import.meta.env.WEATHER_API_KEY
     }`
   ).then((res) => {
@@ -19,7 +20,7 @@ export const GET: APIRoute = async ({ url }) => {
     name: city.name,
     lat: city.lat,
     lon: city.lon,
-    country: regionName.of(city.country),
+    country: countryCodeToName(city.country),
   }));
 
   return new Response(JSON.stringify(cities), {
