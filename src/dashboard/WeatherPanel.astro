@@ -2,6 +2,8 @@
 import { countryCodeToName } from "@/utils";
 import WeatherIcon from "./WeatherIcon.astro";
 import SectionContainer from "@/components/SectionContainer.astro";
+import WeatherBox from "./WeatherBox.astro";
+import PanelBox from "./PanelBox.astro";
 
 type Props = {
   weatherData: Record<string, any>;
@@ -13,16 +15,51 @@ const { weatherData } = Astro.props;
 const name = weatherData.name;
 const country = countryCodeToName(weatherData.sys.country);
 const weather = weatherData.weather[0];
+const main = weatherData.main;
+const coords = weatherData.coord;
 ---
 
 <SectionContainer>
-  <div class="mt-4">
+  <div class="my-4">
     <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold sm:mb-2">{name}</h1>
     <p class="opacity-80 md:text-lg">{country}</p>
+    <p class="flex gap-2 text-sm opacity-50 font-bold">
+      <span>lat: {coords.lat}</span>
+      <span>lon: {coords.lon}</span>
+    </p>
   </div>
-  <div class="w-64 p-4 flex items-center">
-    <div class="w-12">
-      <WeatherIcon code={weather.icon} />
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-6">
+    <PanelBox
+      class="sm:col-start-1 sm:col-end-5 md:col-end-3"
+      innerClass="flex-col items-center justify-center gap-2 p-4 pb-2"
+    >
+      <div class="w-12">
+        <WeatherIcon code={weather.icon} />
+      </div>
+      <span class="text-xl font-bold">{main.temp}°</span>
+      <span>{weather.description}</span>
+      <div class="w-full mt-4 gap-2 flex-wrap flex justify-between">
+        <span class="text-surface-600 dark:text-surface-500 text-sm"
+          >Humidity: {main.humidity}%</span
+        >
+        <span class="text-surface-600 dark:text-surface-500 text-sm"
+          >Pressure: {main.pressure} hPa</span
+        >
+      </div>
+    </PanelBox>
+    <div
+      class="w-full h-full flex sm:row-start-2 sm:col-start-1 sm:col-end-7 md:row-start-1 md:col-start-3"
+    >
+      <WeatherBox>slide</WeatherBox>
+    </div>
+    <div class="w-full h-full flex sm:col-span-2">
+      <WeatherBox>feels_like</WeatherBox>
+    </div>
+    <div class="w-full h-full flex sm:col-span-3 md:col-span-2">
+      <WeatherBox>visibility</WeatherBox>
+    </div>
+    <div class="w-full h-full flex sm:col-span-3 md:col-span-2">
+      <WeatherBox>cloudiness</WeatherBox>
     </div>
   </div>
 </SectionContainer>
