@@ -1,8 +1,11 @@
 ---
 import { countryCodeToName } from "@/utils";
-import WeatherIcon from "./WeatherIcon.astro";
 import SectionContainer from "@/components/SectionContainer.astro";
-import WeatherBox from "./WeatherBox.astro";
+import TemperatureIcon from "@/icons/TemperatureIcon.astro";
+import VisionIcon from "@/icons/VisionIcon.astro";
+import CloudQuestionIcon from "@/icons/CloudQuestionIcon.astro";
+
+import WeatherIcon from "./WeatherIcon.astro";
 import PanelBox from "./PanelBox.astro";
 
 type Props = {
@@ -17,6 +20,8 @@ const country = countryCodeToName(weatherData.sys.country);
 const weather = weatherData.weather[0];
 const main = weatherData.main;
 const coords = weatherData.coord;
+const visibility = weatherData.visibility;
+const cloudiness = weatherData.clouds.all;
 ---
 
 <SectionContainer>
@@ -47,19 +52,43 @@ const coords = weatherData.coord;
         >
       </div>
     </PanelBox>
-    <div
-      class="w-full h-full flex sm:row-start-2 sm:col-start-1 sm:col-end-7 md:row-start-1 md:col-start-3"
+    <PanelBox
+      class="sm:row-start-2 sm:col-start-1 sm:col-end-7 md:row-start-1 md:col-start-3"
+      innerClass=""
     >
-      <WeatherBox>slide</WeatherBox>
-    </div>
-    <div class="w-full h-full flex sm:col-span-2">
-      <WeatherBox>feels_like</WeatherBox>
-    </div>
-    <div class="w-full h-full flex sm:col-span-3 md:col-span-2">
-      <WeatherBox>visibility</WeatherBox>
-    </div>
-    <div class="w-full h-full flex sm:col-span-3 md:col-span-2">
-      <WeatherBox>cloudiness</WeatherBox>
-    </div>
+      slide
+    </PanelBox>
+    <PanelBox class="sm:col-span-2" innerClass="p-4 flex-col items-center">
+      <div class="w-7 mr-auto mb-4">
+        <TemperatureIcon />
+      </div>
+      <span class="mt-auto text-3xl font-bold mb-auto">{main.temp}°</span>
+      <span class="text-md font-bold mt-2">human perception</span>
+      <p class="text-center text-sm">what people say the temp feels like.</p>
+    </PanelBox>
+    <PanelBox
+      class="sm:col-span-3 md:col-span-2"
+      innerClass="p-4 flex-col items-center"
+    >
+      <div class="w-7 mr-auto mb-4">
+        <VisionIcon />
+      </div>
+      <span class="mt-auto text-3xl font-bold mb-auto"
+        >{Math.round(visibility / 1000)}km</span
+      >
+      <span class="text-md font-bold mt-2">visibility</span>
+      <p class="text-center text-sm">how far people could see.</p>
+    </PanelBox>
+    <PanelBox
+      class="sm:col-span-3 md:col-span-2"
+      innerClass="p-4 flex-col items-center"
+    >
+      <div class="w-7 mr-auto mb-4">
+        <CloudQuestionIcon />
+      </div>
+      <span class="mt-auto text-3xl font-bold mb-auto">{cloudiness}%</span>
+      <span class="text-md font-bold mt-2">cloudiness</span>
+      <p class="text-center text-sm">the cloudiness level, idk.</p>
+    </PanelBox>
   </div>
 </SectionContainer>
