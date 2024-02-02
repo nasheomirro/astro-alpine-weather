@@ -1,0 +1,44 @@
+---
+import WeatherIcon from "./WeatherIcon.astro";
+
+type Props = {
+  list: Record<string, any>[];
+};
+
+const { list } = Astro.props;
+
+function convertToNormalFormat(hours: number) {
+  let postfix = "AM";
+  if (hours > 12) {
+    postfix = "PM";
+    hours -= 12;
+  }
+
+  if (hours === 12) postfix = "PM";
+  if (hours === 24) postfix = "AM";
+
+  return `${hours}${postfix}`;
+}
+
+const transformedList = list.map((forecast) => ({
+  icon: forecast.weather[0].icon,
+  temp: `${forecast.main.temp}°`,
+  hour: convertToNormalFormat(new Date(forecast.dt * 1000).getHours()),
+}));
+---
+
+<div class="grow flex flex-col p-2 md:flex-row">
+  {
+    transformedList.map((forecast) => (
+      <div class="grow p-2 flex items-center justify-between border-b last:border-b-0 border-surface-400 dark:border-surface-800 md:flex-col md:border-b-0 md:border-r md:last:border-r-0 md:justify-center md:gap-4">
+        <span class="text-md font-bold">{forecast.hour}</span>
+        <div class="w-full max-w-8 ml-auto mr-4 md:mx-0 md:max-w-10">
+          <WeatherIcon code={forecast.icon} />
+        </div>
+        <span class="w-12" class="text-md font-bold">
+          {forecast.temp}
+        </span>
+      </div>
+    ))
+  }
+</div>

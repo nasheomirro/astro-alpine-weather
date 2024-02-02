@@ -7,12 +7,14 @@ import CloudQuestionIcon from "@/icons/CloudQuestionIcon.astro";
 
 import WeatherIcon from "./WeatherIcon.astro";
 import PanelBox from "./PanelBox.astro";
+import ForecastList from "./ForecastList.astro";
 
 type Props = {
   weatherData: Record<string, any>;
+  forecastData: Record<string, any>;
 };
 
-const { weatherData } = Astro.props;
+const { weatherData, forecastData } = Astro.props;
 
 // refer to: https://openweathermap.org/current#example_JSON
 const name = weatherData.name;
@@ -54,9 +56,9 @@ const cloudiness = weatherData.clouds.all;
     </PanelBox>
     <PanelBox
       class="sm:row-start-2 sm:col-start-1 sm:col-end-7 md:row-start-1 md:col-start-3"
-      innerClass=""
+      innerClass="flex"
     >
-      slide
+      {forecastData && <ForecastList list={forecastData.list} />}
     </PanelBox>
     <PanelBox class="sm:col-span-2" innerClass="p-4 flex-col items-center">
       <div class="w-7 mr-auto mb-4">

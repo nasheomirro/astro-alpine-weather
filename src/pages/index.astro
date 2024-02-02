@@ -1,24 +1,31 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import dummyJson from "@/dummy.json";
 import WeatherPanel from "@/dashboard/WeatherPanel.astro";
+
+import dummyWeatherData from "@/weatherDummy.json";
+import dummyForecastData from "@/forecastDummy.json";
 
 const lat = Astro.url.searchParams.get("lat");
 const lon = Astro.url.searchParams.get("lon");
 
-let weatherData = dummyJson;
+let weatherData = dummyWeatherData;
+let forecastData = dummyForecastData;
 
+// TODO: handle error
 if (lat && lon) {
-  // TODO: handle error
-  // weatherData = await fetch(
-  //   `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${
-  //     import.meta.env.WEATHER_API_KEY
-  //   }&units=metric`
-  // ).then((res) => res.json());
+  weatherData = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${
+      import.meta.env.WEATHER_API_KEY
+    }&units=metric`
+  ).then((res) => res.json());
+  forecastData = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${
+      import.meta.env.WEATHER_API_KEY
+    }&units=metric&cnt=6`
+  ).then((res) => res.json());
 }
 ---
 
 <BaseLayout>
-  <WeatherPanel {weatherData} />
-  <!-- {weatherData ? <pre>{JSON.stringify(weatherData, null, 2)}</pre> : null} -->
+  <WeatherPanel {weatherData} {forecastData} />
 </BaseLayout>
