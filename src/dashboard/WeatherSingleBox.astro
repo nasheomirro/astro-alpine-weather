@@ -1,0 +1,15 @@
+---
+import PanelBox from "./PanelBox.astro";
+---
+
+<PanelBox
+  class="sm:col-span-3 md:col-span-2"
+  innerClass="p-4 flex-col items-center"
+>
+  <div class="w-7 mr-auto mb-4">
+    <slot name="icon" />
+  </div>
+  <span class="mt-auto text-3xl font-bold mb-auto"><slot name="value" /></span>
+  <span class="text-md font-bold mt-2"><slot name="title" /></span>
+  <p class="text-center text-sm"><slot name="description" /></p>
+</PanelBox>

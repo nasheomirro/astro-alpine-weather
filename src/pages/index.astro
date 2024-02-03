@@ -1,4 +1,7 @@
 ---
+import { fetchWeatherData, fetchForecastData } from "@/app/weather";
+import type { WeatherData, ForecastData } from "@/app/types";
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import WeatherPanel from "@/dashboard/WeatherPanel.astro";
 import EmptyPanel from "@/dashboard/EmptyPanel.astro";
@@ -7,30 +10,20 @@ import ErrorPanel from "@/dashboard/ErrorPanel.astro";
 const lat = Astro.url.searchParams.get("lat");
 const lon = Astro.url.searchParams.get("lon");
 
-let weatherData: Record<string, any>;
-let forecastData: Record<string, any>;
+let weatherData: WeatherData | undefined;
+let forecastData: ForecastData | undefined;
 
 let isError = false;
 
 try {
   if (lat && lon) {
-    weatherData = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${
-        import.meta.env.WEATHER_API_KEY
-      }&units=metric`
-    ).then((res) => {
-      if (!res.ok) throw Error();
-      return res.json();
-    });
+    const results = await Promise.all([
+      fetchWeatherData({ lat, lon }),
+      fetchForecastData({ lat, lon }),
+    ]);
 
-    forecastData = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${
-        import.meta.env.WEATHER_API_KEY
-      }&units=metric&cnt=6`
-    ).then((res) => {
-      if (!res.ok) throw Error();
-      return res.json();
-    });
+    weatherData = results[0];
+    forecastData = results[1];
   }
 } catch {
   isError = true;
@@ -41,7 +34,7 @@ try {
   <EmptyPanel />
   {
     !isError ? (
-      weatherData ? (
+      weatherData && forecastData ? (
         <WeatherPanel {weatherData} {forecastData} />
       ) : (
         <EmptyPanel />

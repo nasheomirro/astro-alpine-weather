@@ -1,8 +1,9 @@
 ---
 import CloseIcon from "@/icons/Close.astro";
-import SearchFormButton from "./SearchFormButton.astro";
 import Question from "@/icons/Question.astro";
 import ErrorCircle from "@/icons/ErrorCircle.astro";
+
+import SearchFormButton from "./SearchFormButton.astro";
 ---
 
 <script>
@@ -15,11 +16,7 @@ import ErrorCircle from "@/icons/ErrorCircle.astro";
         if ((e.ctrlKey || e.metaKey) && e.key === "k") {
           e.preventDefault();
           const dialog = this.$refs.dialog;
-          if (!dialog.open) {
-            dialog.showModal();
-          } else {
-            dialog.close();
-          }
+          dialog.open ? dialog.close() : dialog.showModal();
         }
       });
     },

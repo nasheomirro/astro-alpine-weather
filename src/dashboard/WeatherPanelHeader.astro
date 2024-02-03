@@ -1,0 +1,20 @@
+---
+import type { ProcessedWeatherData } from "@/app/types";
+
+type Props = {
+  data: ProcessedWeatherData;
+};
+
+let {
+  data: { name, country, coords },
+} = Astro.props;
+---
+
+<div class="my-4">
+  <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold sm:mb-2">{name}</h1>
+  <p class="opacity-80 md:text-lg">{country}</p>
+  <p class="flex gap-2 text-sm opacity-50 font-bold">
+    <span>lat: {coords.lat}</span>
+    <span>lon: {coords.lon}</span>
+  </p>
+</div>

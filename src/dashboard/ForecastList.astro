@@ -1,8 +1,9 @@
 ---
 import WeatherIcon from "./WeatherIcon.astro";
+import type { WeatherData } from "@/app/types";
 
 type Props = {
-  list: Record<string, any>[];
+  list: WeatherData[];
 };
 
 const { list } = Astro.props;

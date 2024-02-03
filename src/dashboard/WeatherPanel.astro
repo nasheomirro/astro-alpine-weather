@@ -1,40 +1,31 @@
 ---
-import { countryCodeToName } from "@/utils";
+import { processWeatherData } from "@/app/weather";
+import type { WeatherData } from "@/app/types";
+
 import SectionContainer from "@/components/SectionContainer.astro";
 import TemperatureIcon from "@/icons/Temperature.astro";
 import VisionIcon from "@/icons/VisionOpen.astro";
 import CloudQuestionIcon from "@/icons/CloudDown.astro";
-
 import WeatherIcon from "./WeatherIcon.astro";
+
+import WeatherPanelHeader from "./WeatherPanelHeader.astro";
 import PanelBox from "./PanelBox.astro";
 import ForecastList from "./ForecastList.astro";
+import SingularBox from "./WeatherSingleBox.astro";
 
 type Props = {
-  weatherData: Record<string, any>;
-  forecastData: Record<string, any>;
+  weatherData: WeatherData;
+  forecastData: { list: WeatherData[] };
 };
 
 const { weatherData, forecastData } = Astro.props;
-
-// refer to: https://openweathermap.org/current#example_JSON
-const name = weatherData.name;
-const country = countryCodeToName(weatherData.sys.country);
-const weather = weatherData.weather[0];
-const main = weatherData.main;
-const coords = weatherData.coord;
-const visibility = weatherData.visibility;
-const cloudiness = weatherData.clouds.all;
+const processedWeatherData = processWeatherData(weatherData);
+const { cloudiness, main, visibility, weather } = processedWeatherData;
 ---
 
 <SectionContainer>
-  <div class="my-4">
-    <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold sm:mb-2">{name}</h1>
-    <p class="opacity-80 md:text-lg">{country}</p>
-    <p class="flex gap-2 text-sm opacity-50 font-bold">
-      <span>lat: {coords.lat}</span>
-      <span>lon: {coords.lon}</span>
-    </p>
-  </div>
+  <WeatherPanelHeader data={processedWeatherData} />
+
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-6">
     <PanelBox
       class="sm:col-start-1 sm:col-end-5 md:col-end-3"
@@ -54,43 +45,35 @@ const cloudiness = weatherData.clouds.all;
         >
       </div>
     </PanelBox>
+
     <PanelBox
       class="sm:row-start-2 sm:col-start-1 sm:col-end-7 md:row-start-1 md:col-start-3"
       innerClass="flex"
     >
       {forecastData && <ForecastList list={forecastData.list} />}
     </PanelBox>
-    <PanelBox class="sm:col-span-2" innerClass="p-4 flex-col items-center">
-      <div class="w-7 mr-auto mb-4">
-        <TemperatureIcon />
-      </div>
-      <span class="mt-auto text-3xl font-bold mb-auto">{main.temp}°</span>
-      <span class="text-md font-bold mt-2">human perception</span>
-      <p class="text-center text-sm">what people say the temp feels like.</p>
-    </PanelBox>
-    <PanelBox
-      class="sm:col-span-3 md:col-span-2"
-      innerClass="p-4 flex-col items-center"
-    >
-      <div class="w-7 mr-auto mb-4">
-        <VisionIcon />
-      </div>
-      <span class="mt-auto text-3xl font-bold mb-auto"
-        >{Math.round(visibility / 1000)}km</span
-      >
-      <span class="text-md font-bold mt-2">visibility</span>
-      <p class="text-center text-sm">how far people could see.</p>
-    </PanelBox>
-    <PanelBox
-      class="sm:col-span-3 md:col-span-2"
-      innerClass="p-4 flex-col items-center"
-    >
-      <div class="w-7 mr-auto mb-4">
-        <CloudQuestionIcon />
-      </div>
-      <span class="mt-auto text-3xl font-bold mb-auto">{cloudiness}%</span>
-      <span class="text-md font-bold mt-2">cloudiness</span>
-      <p class="text-center text-sm">the cloudiness level, idk.</p>
-    </PanelBox>
+
+    <SingularBox>
+      <TemperatureIcon slot="icon" />
+      <Fragment slot="value">{main.temp}°</Fragment>
+      <Fragment slot="title">human perception</Fragment>
+      <Fragment slot="description">
+        what people say the temp feels like.
+      </Fragment>
+    </SingularBox>
+
+    <SingularBox>
+      <VisionIcon slot="icon" />
+      <Fragment slot="value">{visibility}</Fragment>
+      <Fragment slot="title">visibility</Fragment>
+      <Fragment slot="description">how far people could see.</Fragment>
+    </SingularBox>
+
+    <SingularBox>
+      <CloudQuestionIcon slot="icon" />
+      <Fragment slot="value">{cloudiness}%</Fragment>
+      <Fragment slot="title">cloudiness</Fragment>
+      <Fragment slot="description">the cloudiness level, idk.</Fragment>
+    </SingularBox>
   </div>
 </SectionContainer>
