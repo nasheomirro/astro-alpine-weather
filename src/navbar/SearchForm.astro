@@ -10,11 +10,6 @@ import ErrorCircle from "@/icons/ErrorCircle.astro";
 
   alpineData("search_form", () => ({
     results: [],
-    get state() {
-      if (this.results.length === 0) return "none";
-      else if (this.results === null) return "error";
-      return "list";
-    },
     init() {
       document.addEventListener("keydown", (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -36,7 +31,7 @@ import ErrorCircle from "@/icons/ErrorCircle.astro";
             "/api/cities?q=" + this.$refs.search.value
           ).then((res) => {
             if (!res.ok) throw Error();
-            res.json();
+            return res.json();
           });
           this.results = res;
         } catch {
@@ -73,7 +68,7 @@ import ErrorCircle from "@/icons/ErrorCircle.astro";
       />
 
       <ul class="pt-4">
-        <template x-if="state === 'list'">
+        <template x-if="results?.length > 0">
           <template x-for="result in results">
             <li>
               <a
@@ -87,7 +82,7 @@ import ErrorCircle from "@/icons/ErrorCircle.astro";
           </template>
         </template>
 
-        <template x-if="state === 'none'">
+        <template x-if="results?.length === 0">
           <li class="text-center flex items-center justify-center flex-col">
             <div
               class="w-16 text-surface-600 dark:text-surface-800 md:w-20 mb-2"
@@ -98,7 +93,7 @@ import ErrorCircle from "@/icons/ErrorCircle.astro";
           </li>
         </template>
 
-        <template x-if="state === 'error'">
+        <template x-if="!results">
           <li class="text-center flex items-center justify-center flex-col">
             <div
               class="w-16 text-surface-600 dark:text-surface-800 md:w-20 mb-2"
