@@ -1,30 +1,47 @@
 ---
-import CloseIcon from "@/icons/CloseIcon.astro";
+import CloseIcon from "@/icons/Close.astro";
 import SearchFormButton from "./SearchFormButton.astro";
+import Question from "@/icons/Question.astro";
+import ErrorCircle from "@/icons/ErrorCircle.astro";
 ---
 
 <script>
   import { alpineData } from "@/utils";
-  import initialResults from "./initial.json";
 
   alpineData("search_form", () => ({
+    results: [],
+    get state() {
+      if (this.results.length === 0) return "none";
+      else if (this.results === null) return "error";
+      return "list";
+    },
     init() {
       document.addEventListener("keydown", (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === "k") {
           e.preventDefault();
-          this.$refs.dialog.showModal();
+          const dialog = this.$refs.dialog;
+          if (!dialog.open) {
+            dialog.showModal();
+          } else {
+            dialog.close();
+          }
         }
       });
     },
-    results: initialResults,
     async fetchResults() {
       const searchValue = this.$refs.search.value;
       if (searchValue) {
-        // TODO: handle error
-        const res = await fetch(
-          "/api/cities?q=" + this.$refs.search.value
-        ).then((res) => res.json());
-        this.results = res;
+        try {
+          const res = await fetch(
+            "/api/cities?q=" + this.$refs.search.value
+          ).then((res) => {
+            if (!res.ok) throw Error();
+            res.json();
+          });
+          this.results = res;
+        } catch {
+          this.results = null;
+        }
       }
     },
   }));
@@ -56,18 +73,39 @@ import SearchFormButton from "./SearchFormButton.astro";
       />
 
       <ul class="pt-4">
-        <template x-if="results.length == 0">
-          <li class="text-center">no results found</li>
+        <template x-if="state === 'list'">
+          <template x-for="result in results">
+            <li>
+              <a
+                class="flex gap-3 items-end text-auto p-1"
+                :href="`/?lat=${result.lat}&lon=${result.lon}`"
+              >
+                <span x-text="result.name"></span>
+                <span class="text-sm opacity-70" x-text="result.country"></span>
+              </a>
+            </li>
+          </template>
         </template>
-        <template x-for="result in results">
-          <li>
-            <a
-              class="flex gap-3 items-end text-auto p-1"
-              :href="`/?lat=${result.lat}&lon=${result.lon}`"
+
+        <template x-if="state === 'none'">
+          <li class="text-center flex items-center justify-center flex-col">
+            <div
+              class="w-16 text-surface-600 dark:text-surface-800 md:w-20 mb-2"
             >
-              <span x-text="result.name"></span>
-              <span class="text-sm opacity-70" x-text="result.country"></span>
-            </a>
+              <Question />
+            </div>
+            <span class="opacity-60">no results found</span>
+          </li>
+        </template>
+
+        <template x-if="state === 'error'">
+          <li class="text-center flex items-center justify-center flex-col">
+            <div
+              class="w-16 text-surface-600 dark:text-surface-800 md:w-20 mb-2"
+            >
+              <ErrorCircle />
+            </div>
+            <span class="opacity-60">failed to search!</span>
           </li>
         </template>
       </ul>

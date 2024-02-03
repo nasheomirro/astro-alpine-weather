@@ -1,4 +1,5 @@
 ---
+import ThemeScript from "@/navbar/ThemeScript.astro";
 import Topbar from "@/navbar/Topbar.astro";
 ---
 
@@ -8,19 +9,9 @@ import Topbar from "@/navbar/Topbar.astro";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Document</title>
-    <script is:inline>
-      let theme = localStorage.getItem("theme");
-      if (!theme) {
-        const isDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        theme = isDark ? "dark" : "light";
-      }
-      // avoid FOUC
-      if (theme === "dark") document.documentElement.classList.add("dark");
-    </script>
+    <ThemeScript />
   </head>
-  
+
   <body
     class="text-surface-900 bg-surface-100 dark:bg-surface-950 dark:text-surface-50"
   >
