@@ -1,15 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import WeatherPanel from "@/dashboard/WeatherPanel.astro";
-
-import dummyWeatherData from "@/weatherDummy.json";
-import dummyForecastData from "@/forecastDummy.json";
+import EmptyPanel from "@/dashboard/EmptyPanel.astro";
 
 const lat = Astro.url.searchParams.get("lat");
 const lon = Astro.url.searchParams.get("lon");
 
-let weatherData = dummyWeatherData;
-let forecastData = dummyForecastData;
+let weatherData: Record<string, any>;
+let forecastData: Record<string, any>;
 
 // TODO: handle error
 if (lat && lon) {
@@ -27,5 +25,6 @@ if (lat && lon) {
 ---
 
 <BaseLayout>
-  <WeatherPanel {weatherData} {forecastData} />
+  <EmptyPanel />
+  {weatherData ? <WeatherPanel {weatherData} {forecastData} /> : <EmptyPanel />}
 </BaseLayout>
